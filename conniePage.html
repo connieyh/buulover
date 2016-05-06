@@ -8,12 +8,16 @@
 	
 </head>
 <body>
-	<p>Share sth with Connie</p>
+	<p>Share sth with David</p>
 	<div class="shareForm">
 		<input type="text" id="shareUrl">
 		<button id="shareBtn" class="btn btn-primary">
 			<span>Share!</span>
 		</button>
+	</div>
+	<div id="url-view-area" style="display:none">
+		<ul id="url-list" style="list-style-type:none">
+		</ul>
 	</div>
 	<script src='index.js'></script>
 	<script>
@@ -31,8 +35,8 @@
 			} else if (!isValidUrl(inputText)){
 				alert("Please enter a format valid link");
 			} else {
-				var connieDB = new Firebase("https://blinding-fire-4757.firebaseio.com/Connie");
-				connieDB.push({
+				var davidDB = new Firebase("https://blinding-fire-4757.firebaseio.com/David");
+				davidDB.push({
 					// title: "Hello World II!",
 				  	url: inputText,
 		  	// 		location: {
@@ -41,16 +45,15 @@
 		   //  			zip: 94103
 		  	// 		}
 				});
-				alert("added!");
 			}
 		});
 
 		var hasData = false;
 		var $urlArea=  document.getElementById('url-view-area');
 
-		var davidDB = new Firebase("https://blinding-fire-4757.firebaseio.com/David");
+		var connieDB = new Firebase("https://blinding-fire-4757.firebaseio.com/Connie");
 
-		davidDB.on('child_added', function(snapshot) {
+		connieDB.on('child_added', function(snapshot) {
 			var message = snapshot.val();
 			console.log(message.url);
 			if (!hasData && message) {
@@ -73,10 +76,6 @@
 			$urlList.appendChild(list);
 		}
 
-		// ref.on('child_added', function(snapshot) {
-		// 	var message = snapshot.val();
-		// 	console.log(message.title);
-		// });
 	</script>
 </body>
 

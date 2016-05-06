@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script> -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link rel="stylesheet" href="index.css">
+	<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+	
+</head>
+<body>
+	<p>Share sth with Connie</p>
+	<div class="shareForm">
+		<input type="text" id="shareUrl">
+		<button id="shareBtn" class="btn btn-primary">
+			<span>Share!</span>
+		</button>
+	</div>
+	<script src='index.js'></script>
+	<script>
+		// var btnConnie = document.getElementsByClassName('btn-connie');
+		var $els = captureEl();
+		var $input = $els.input;
+		var $form = $els.form;
+		var $shareBtn = $els.shareBtn;
+	
+		$shareBtn.addEventListener('click', function() {
+			var inputText = $input.value;
+			console.log($input.value);
+			if (!inputText) {
+				alert("Please enter a valid link");
+			} else if (!isValidUrl(inputText)){
+				alert("Please enter a format valid link");
+			} else {
+				var connieDB = new Firebase("https://blinding-fire-4757.firebaseio.com/Connie");
+				connieDB.push({
+					// title: "Hello World II!",
+				  	url: inputText,
+		  	// 		location: {
+		   //  			city: "San Francisco",
+		   //  			state: "California",
+		   //  			zip: 94103
+		  	// 		}
+				});
+				alert("added!");
+			}
+		});
+
+		// ref.on('child_added', function(snapshot) {
+		// 	var message = snapshot.val();
+		// 	console.log(message.title);
+		// });
+	</script>
+</body>
+
+</html>

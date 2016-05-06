@@ -1,0 +1,22 @@
+html, body {
+	margin: 0;
+}
+
+.btn-david, .btn-connie {
+	display: inline-block;
+}
+
+
+
+.identity-group {
+	text-align: center;
+	margin-top: 20%;
+}
+
+/*.btn {
+	width: 10%;
+}*/
+
+.btn-david a {
+	text-decoration: none;
+}

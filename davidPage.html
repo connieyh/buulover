@@ -8,8 +8,17 @@
 	
 </head>
 <body>
+	<div id="alert-area">
+		<div id="empty-input-alert" class="alert alert-warning alert-dismissible" role="alert">
+	  		<strong>Yo!</strong> You haven't entered anything!
+		</div>
+		<div id="wrong-input-alert" class="alert alert-danger" role="alert">
+	  		<span class="sr-only">Error:</span>
+			<strong>Hey!</strong> You have to enter a valid url address
+		</div>
+	</div>
 	<div class="shareForm">
-		<h4>Share sth with Connie</h4>
+		<h4  class="shareForm-title">Share sth with Connie</h4>
 		<input type="text" id="shareUrl">
 		<button id="shareBtn" class="btn btn-primary">
 			<span>Share!</span>
@@ -30,23 +39,31 @@
 	
 		$shareBtn.addEventListener('click', function() {
 			var inputText = $input.value;
-			console.log($input.value);
+			var $emptyAlert = document.getElementById('empty-input-alert');
+			var $wrongAlert = document.getElementById('wrong-input-alert');
 			if (!inputText) {
-				alert("Please enter a valid link");
+				if ($wrongAlert.style.display == 'block') {
+					$wrongAlert.style.display = 'none';
+				}
+				$emptyAlert.style.display = 'block';
+				// alert("Please enter a valid link");
 			} else if (!isValidUrl(inputText)){
-				alert("Please enter a format valid link");
+				if ($emptyAlert.style.display == 'block') {
+					$emptyAlert.style.display = 'none';
+				}
+				$wrongAlert.style.display = 'block';
 			} else {
 				var connieDB = new Firebase("https://blinding-fire-4757.firebaseio.com/Connie");
 				connieDB.push({
 					// title: "Hello World II!",
 				  	url: inputText,
-		  	// 		location: {
-		   //  			city: "San Francisco",
-		   //  			state: "California",
-		   //  			zip: 94103
-		  	// 		}
 				});
-				alert("added!");
+				reset($input);
+				if ($emptyAlert.style.display == 'block') {
+					$emptyAlert.style.display = 'none';
+				} else if ($wrongAlert.style.display == 'block') {
+					$wrongAlert.style.display = 'none';
+				}
 			}
 		});
 

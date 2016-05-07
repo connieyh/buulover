@@ -26,6 +26,12 @@ function isValidUrl(url) {
 	return url.match(regex);
 }
 
+function reset(input) {
+	input.value = "";
+}
+
+
+
 
 
 

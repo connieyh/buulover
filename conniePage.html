@@ -18,14 +18,14 @@
 		</div>
 	</div>
 	<div class="shareForm">
-		<h4  class="shareForm-title">Share sth with Connie</h4>
+		<h4 class="shareForm-title">Share sth with David</h4>
 		<input type="text" id="shareUrl">
 		<button id="shareBtn" class="btn btn-primary">
 			<span>Share!</span>
 		</button>
 	</div>
 	<div id="url-view-area" style="display:none">
-		<h5>Connie has shared ... </h5>
+		<h5>David has shared ...</h5>
 		<ul id="url-list" style="list-style-type:none">
 		</ul>
 	</div>
@@ -36,7 +36,7 @@
 		var $input = $els.input;
 		var $form = $els.form;
 		var $shareBtn = $els.shareBtn;
-	
+		
 		$shareBtn.addEventListener('click', function() {
 			var inputText = $input.value;
 			var $emptyAlert = document.getElementById('empty-input-alert');
@@ -52,27 +52,37 @@
 					$emptyAlert.style.display = 'none';
 				}
 				$wrongAlert.style.display = 'block';
+				// alert("Please enter a format valid link");
 			} else {
-				var connieDB = new Firebase("https://blinding-fire-4757.firebaseio.com/Connie");
-				connieDB.push({
+
+				var davidDB = new Firebase("https://blinding-fire-4757.firebaseio.com/David");
+				davidDB.push({
 					// title: "Hello World II!",
 				  	url: inputText,
+		  	// 		location: {
+		   //  			city: "San Francisco",
+		   //  			state: "California",
+		   //  			zip: 94103
+		  	// 		}
 				});
 				reset($input);
+				
 				if ($emptyAlert.style.display == 'block') {
 					$emptyAlert.style.display = 'none';
 				} else if ($wrongAlert.style.display == 'block') {
 					$wrongAlert.style.display = 'none';
 				}
+				
 			}
+			console.log(hasOneAlert);
 		});
 
 		var hasData = false;
 		var $urlArea=  document.getElementById('url-view-area');
 
-		var davidDB = new Firebase("https://blinding-fire-4757.firebaseio.com/David");
+		var connieDB = new Firebase("https://blinding-fire-4757.firebaseio.com/Connie");
 
-		davidDB.on('child_added', function(snapshot) {
+		connieDB.on('child_added', function(snapshot) {
 			var message = snapshot.val();
 			console.log(message.url);
 			if (!hasData && message) {
@@ -97,10 +107,6 @@
 			$urlList.appendChild(list);
 		}
 
-		// ref.on('child_added', function(snapshot) {
-		// 	var message = snapshot.val();
-		// 	console.log(message.title);
-		// });
 	</script>
 </body>
 

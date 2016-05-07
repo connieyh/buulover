@@ -64,8 +64,8 @@ function doActionAfterShare() {
 		}
 		$wrongAlert.style.display = 'block';
 	} else {
-		var db = new Firebase("https://blinding-fire-4757.firebaseio.com/" + shareTo);
-		db.push({
+		// var db = new Firebase("https://blinding-fire-4757.firebaseio.com/" + shareTo);
+		ref.child(shareTo).push({
 			// title: "Hello World II!",
 		  	url: inputText,
 		});

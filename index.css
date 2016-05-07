@@ -7,14 +7,15 @@ body {
 }
 
 .shareForm-title {
-	width: 50%;
-	padding-left: 6.3em;
+	width: 60%;
+	/*padding-left: 10%;*/
 }
 
 #shareUrl {
 	width: 50%;
 	/*height: 34px;*/
 	font-size: 20px;
+	font-family: Georgia;
 	line-height: 1.4;
 	color: #555;
 	background-color: #fff;

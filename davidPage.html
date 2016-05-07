@@ -25,82 +25,30 @@
 		</button>
 	</div>
 	<div id="url-view-area" style="display:none">
-		<h5>Connie has shared ... </h5>
+		<h5>See what Connie has shared on your board... </h5>
 		<ul id="url-list" style="list-style-type:none">
 		</ul>
 	</div>
 	<script src='index.js'></script>
 	<script>
 		// var btnConnie = document.getElementsByClassName('btn-connie');
-		var $els = captureEl();
-		var $input = $els.input;
-		var $form = $els.form;
-		var $shareBtn = $els.shareBtn;
-	
-		$shareBtn.addEventListener('click', function() {
-			var inputText = $input.value;
-			var $emptyAlert = document.getElementById('empty-input-alert');
-			var $wrongAlert = document.getElementById('wrong-input-alert');
-			if (!inputText) {
-				if ($wrongAlert.style.display == 'block') {
-					$wrongAlert.style.display = 'none';
-				}
-				$emptyAlert.style.display = 'block';
-				// alert("Please enter a valid link");
-			} else if (!isValidUrl(inputText)){
-				if ($emptyAlert.style.display == 'block') {
-					$emptyAlert.style.display = 'none';
-				}
-				$wrongAlert.style.display = 'block';
-			} else {
-				var connieDB = new Firebase("https://blinding-fire-4757.firebaseio.com/Connie");
-				connieDB.push({
-					// title: "Hello World II!",
-				  	url: inputText,
-				});
-				reset($input);
-				if ($emptyAlert.style.display == 'block') {
-					$emptyAlert.style.display = 'none';
-				} else if ($wrongAlert.style.display == 'block') {
-					$wrongAlert.style.display = 'none';
-				}
-			}
-		});
-
-		var hasData = false;
-		var $urlArea=  document.getElementById('url-view-area');
-
-		var davidDB = new Firebase("https://blinding-fire-4757.firebaseio.com/David");
-
-		davidDB.on('child_added', function(snapshot) {
-			var message = snapshot.val();
-			console.log(message.url);
-			if (!hasData && message) {
-				hasData = true;
-				$urlArea.style.display = 'block';
-				$urlArea.style.textAlign = 'center';
-				$urlArea.style.marginTop = '8em';
-			}
-			appendList(message.url);
-			
-		});
-
-		var $urlList= document.getElementById('url-list')
-		function appendList(url) {
-			var list = document.createElement('li');
-			var anchor = document.createElement('a');
-			var t = document.createTextNode(url);
-			anchor.appendChild(t);
-			anchor.href = url;
-			anchor.target = "_blank";
-			list.appendChild(anchor);
-			$urlList.appendChild(list);
-		}
+		bindEventListenerOnShareBtn();
+		displaySharedContent();
+		addKeyboardEventListner();
 
 		// ref.on('child_added', function(snapshot) {
 		// 	var message = snapshot.val();
 		// 	console.log(message.title);
 		// });
+
+
+		// document.getElementById('shareUrl').addEventListener("keydown", checkKeyPressed, false);
+ 
+		// function checkKeyPressed(e) {
+		//     if (e.keyCode == 13) {
+		//         alert("The 'a' key is pressed.");
+		//     }
+		// }
 	</script>
 </body>
 

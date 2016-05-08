@@ -30,13 +30,13 @@ function reset(input) {
 	input.value = "";
 }
 
-function getShareTo() {
+function getSharedFrom() {
 	var titleStrArr = document.getElementsByClassName('shareForm-title')[0].innerHTML.split(" ");
 	return titleStrArr[titleStrArr.length-1];
 }
 
-function getCurrentViewer() {
-	if (getShareTo() == 'Connie') {
+function getSharedBy() {
+	if (getSharedFrom() == 'Connie') {
 		return 'David';
 	}
 	return 'Connie';
@@ -47,7 +47,7 @@ function doActionAfterShare() {
 	var $input = $els.input;
 	var $form = $els.form;
 	var $shareBtn = $els.shareBtn;
-	var shareTo = getShareTo();
+	// var sharedBy = getSharedBy();
 
 	var inputText = $input.value;
 	var $emptyAlert = document.getElementById('empty-input-alert');
@@ -65,7 +65,7 @@ function doActionAfterShare() {
 		$wrongAlert.style.display = 'block';
 	} else {
 		// var db = new Firebase("https://blinding-fire-4757.firebaseio.com/" + shareTo);
-		ref.child(shareTo).push({
+		ref.child(getSharedBy()).push({
 			// title: "Hello World II!",
 		  	url: inputText,
 		});
@@ -76,7 +76,7 @@ function doActionAfterShare() {
 			$wrongAlert.style.display = 'none';
 		}
 	}
-	console.log("inside do action");
+	// console.log("inside do action");
 
 }
 
@@ -85,7 +85,7 @@ function bindEventListenerOnShareBtn() {
 	var $input = $els.input;
 	var $form = $els.form;
 	var $shareBtn = $els.shareBtn;
-	var shareTo = getShareTo();
+	var sharedBy = getSharedBy();
 	
 	// $shareBtn.addEventListener('click', function() {
 	// 	var inputText = $input.value;
@@ -116,7 +116,7 @@ function bindEventListenerOnShareBtn() {
 	// 		}
 	// 	}
 	// });
-	console.log("inside bind");
+	// console.log("inside bind");
 
 	$shareBtn.addEventListener('click', doActionAfterShare);
 
@@ -135,13 +135,14 @@ function displaySharedContent() {
 	var hasData = false;
 	var $urlArea=  document.getElementById('url-view-area');
 	var $urlList= document.getElementById('url-list');
-	var curViewer = getCurrentViewer();
+	var sharedFrom = getSharedFrom();
 	
-	var db = new Firebase("https://blinding-fire-4757.firebaseio.com/" + curViewer);
+	// var db = new Firebase("https://blinding-fire-4757.firebaseio.com/" + curViewer);
 
-	db.on('child_added', function(snapshot) {
+
+	ref.child(getSharedFrom()).on('child_added', function(snapshot) {
 		var message = snapshot.val();
-		console.log(message.url);
+		// console.log(message.url);
 		if (!hasData && message) {
 			hasData = true;
 			$urlArea.style.display = 'block';
@@ -164,6 +165,8 @@ function displaySharedContent() {
 		$urlList.appendChild(list);
 	}
 }
+
+
 
 
 

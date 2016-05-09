@@ -47,7 +47,6 @@ function doActionAfterShare() {
 	var $input = $els.input;
 	var $form = $els.form;
 	var $shareBtn = $els.shareBtn;
-	// var sharedBy = getSharedBy();
 
 	var inputText = $input.value;
 	var $emptyAlert = document.getElementById('empty-input-alert');
@@ -65,16 +64,22 @@ function doActionAfterShare() {
 		$wrongAlert.style.display = 'block';
 	} else {
 		// var db = new Firebase("https://blinding-fire-4757.firebaseio.com/" + shareTo);
+		var dateTime = new Date();
 		ref.child(getSharedBy()).push({
 			// title: "Hello World II!",
 		  	url: inputText,
+		  	read: false,
+		  	dateTime: Firebase.ServerValue.TIMESTAMP
 		});
+
+
 		reset($input);
 		if ($emptyAlert.style.display == 'block') {
 			$emptyAlert.style.display = 'none';
 		} else if ($wrongAlert.style.display == 'block') {
 			$wrongAlert.style.display = 'none';
 		}
+		
 	}
 	// console.log("inside do action");
 
@@ -86,37 +91,6 @@ function bindEventListenerOnShareBtn() {
 	var $form = $els.form;
 	var $shareBtn = $els.shareBtn;
 	var sharedBy = getSharedBy();
-	
-	// $shareBtn.addEventListener('click', function() {
-	// 	var inputText = $input.value;
-	// 	var $emptyAlert = document.getElementById('empty-input-alert');
-	// 	var $wrongAlert = document.getElementById('wrong-input-alert');
-	// 	if (!inputText) {
-	// 		if ($wrongAlert.style.display == 'block') {
-	// 			$wrongAlert.style.display = 'none';
-	// 		}
-	// 		$emptyAlert.style.display = 'block';
-	// 		// alert("Please enter a valid link");
-	// 	} else if (!isValidUrl(inputText)){
-	// 		if ($emptyAlert.style.display == 'block') {
-	// 			$emptyAlert.style.display = 'none';
-	// 		}
-	// 		$wrongAlert.style.display = 'block';
-	// 	} else {
-	// 		var db = new Firebase("https://blinding-fire-4757.firebaseio.com/" + shareTo);
-	// 		db.push({
-	// 			// title: "Hello World II!",
-	// 		  	url: inputText,
-	// 		});
-	// 		reset($input);
-	// 		if ($emptyAlert.style.display == 'block') {
-	// 			$emptyAlert.style.display = 'none';
-	// 		} else if ($wrongAlert.style.display == 'block') {
-	// 			$wrongAlert.style.display = 'none';
-	// 		}
-	// 	}
-	// });
-	// console.log("inside bind");
 
 	$shareBtn.addEventListener('click', doActionAfterShare);
 
@@ -133,36 +107,120 @@ function addKeyboardEventListner() {
 
 function displaySharedContent() {
 	var hasData = false;
-	var $urlArea=  document.getElementById('url-view-area');
-	var $urlList= document.getElementById('url-list');
-	var sharedFrom = getSharedFrom();
+	var $urlListContainer=  document.getElementById('url-list-container');
+	var $urlListGroup= document.getElementById('url-list-group');
+	
 	
 	// var db = new Firebase("https://blinding-fire-4757.firebaseio.com/" + curViewer);
 
+	var currentId = 0;
+	var sharedFrom = getSharedFrom();
 
-	ref.child(getSharedFrom()).on('child_added', function(snapshot) {
-		var message = snapshot.val();
+	ref.child(getSharedFrom()).once('value', function(snapshot) {
+		var urlListObject = snapshot.val();
+		var keyArray = Object.keys(urlListObject);
+		console.log(keyArray);
+
+		keyArray.reverse();
+		console.log(keyArray);
 		// console.log(message.url);
-		if (!hasData && message) {
+		if (!hasData && urlListObject) {
 			hasData = true;
-			$urlArea.style.display = 'block';
-			$urlArea.style.textAlign = 'center';
-			$urlArea.style.marginTop = '5em';
+			// make $urlListContainer show
+			$urlListContainer.style.display = 'block';
+			// $urlListContainer.style.textAlign = 'center';
+			$urlListContainer.style.marginTop = '5em';
 		}
-		appendList(message.url);
-		
+
+		for (var i = 0; i < keyArray.length; i++) {
+			var $elements = buildElements(urlListObject[keyArray[i]].url, i);
+			assembleList($elements);
+		}
+
 	});
 
+
+
+
+	function buildElements(url, index) {
+		// create element 'li'
+		var $listLi = document.createElement('li');
+		// listLi.setAttribute('id', 'url-'+index);
+		$listLi.id = 'url-'+(index+1);
+		// console.log($listLi);
+
+		// create element 'article' with classname 'url-item'
+		var $listArticle = document.createElement('article');
+		$listArticle.className = 'url-item';
+		// $listArticle.className += ' ' + 'whatever';
+
+		
+		
+		// text to put into 'p'
+		var urlText = document.createTextNode(url);
+
+		// create 'div' with classname 'url-item-info'
+		// create 'p' with classname 'url-item-text' and append into 'url-item-info'
+
+
+		var $urlItemInfo = document.createElement('div');
+		$urlItemInfo.className = 'url-item-info';
+
+		var $urlItemText = document.createElement('p');
+		$urlItemText.className = 'url-item-text';
+		$urlItemText.appendChild(urlText);
+		$urlItemInfo.appendChild($urlItemText);
+
+		
+
+		// create element 'a'
+		var $anchor = document.createElement('a');
+		$anchor.className = 'url-link';
+		$anchor.href = url;
+
+
+		// create 'div' with classname 'url-item-manage-group'
+		var $urlManageGroup = document.createElement('div');
+		$urlManageGroup.className = 'url-item-manage-group';
+
+
+		// anchor.appendChild(t);
+		// anchor.href = url;
+		// anchor.target = "_blank";
+
+		return {
+			listLi: $listLi,
+			listArticle: $listArticle,
+			urlItemInfo: $urlItemInfo,
+			anchor: $anchor,
+			urlManageGroup: $urlManageGroup
+		}
+
+	}
+
 	
-	function appendList(url) {
-		var list = document.createElement('li');
-		var anchor = document.createElement('a');
-		var t = document.createTextNode(url);
-		anchor.appendChild(t);
-		anchor.href = url;
-		anchor.target = "_blank";
-		list.appendChild(anchor);
-		$urlList.appendChild(list);
+	function assembleList($elements) {
+		
+		// list.appendChild(anchor);
+		// $urlListGroup.appendChild(list);
+		var $listLi = $elements.listLi;
+		var $listArticle = $elements.listArticle;
+		var $urlItemInfo = $elements.urlItemInfo;
+		var $anchor = $elements.anchor;
+		var $urlManageGroup = $elements.urlManageGroup;
+
+		$listArticle.appendChild($urlItemInfo);
+		$listArticle.appendChild($anchor);
+		$listArticle.appendChild($urlManageGroup)
+		// console.log($listArticle);
+
+		$listLi.appendChild($listArticle);
+		$urlListGroup.appendChild($listLi);
+
+		console.log($urlListGroup);
+
+
+		// console.log($urlListContainer);
 	}
 }
 

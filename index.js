@@ -147,14 +147,14 @@ function displaySharedContent() {
 		var $listLi = document.createElement('li');
 		// listLi.setAttribute('id', 'url-'+index);
 		$listLi.id = 'url-'+(index+1);
+		$listLi.className = 'url-item-wrapper'
 		// console.log($listLi);
+
 
 		// create element 'article' with classname 'url-item'
 		var $listArticle = document.createElement('article');
 		$listArticle.className = 'url-item';
 		// $listArticle.className += ' ' + 'whatever';
-
-		
 		
 		// text to put into 'p'
 		var urlText = document.createTextNode(url);
@@ -183,7 +183,7 @@ function displaySharedContent() {
 		var $urlManageGroup = document.createElement('div');
 		$urlManageGroup.className = 'url-item-manage-group';
 
-
+		addEventListenerToUrlItem($listLi, url);
 		// anchor.appendChild(t);
 		// anchor.href = url;
 		// anchor.target = "_blank";
@@ -219,8 +219,16 @@ function displaySharedContent() {
 
 		console.log($urlListGroup);
 
+		return $listLi;
+
 
 		// console.log($urlListContainer);
+	}
+
+	function addEventListenerToUrlItem($urlItem, url) {
+		$urlItem.addEventListener('click', function() {
+			window.open(url, '_blank');
+		});
 	}
 }
 

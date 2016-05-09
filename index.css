@@ -62,12 +62,13 @@ body {
 }
 
 .url-item-wrapper {
-	margin-bottom: 5em;
+	margin-bottom: 1em;
 }
 
 .url-item {
 	
 	border: 1px solid #ccc;
+	padding: 1em;
 }
 
 .url-item-info {

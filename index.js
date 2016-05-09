@@ -133,7 +133,7 @@ function displaySharedContent() {
 		}
 
 		for (var i = 0; i < keyArray.length; i++) {
-			var $elements = buildElements(urlListObject[keyArray[i]], i);
+			var $elements = buildElements(urlListObject[keyArray[i]], keyArray[i], i);
 			assembleList($elements);
 		}
 
@@ -144,7 +144,7 @@ function displaySharedContent() {
 		return urlObject.read;
 	}
 
-	function buildElements(urlObject, index) {
+	function buildElements(urlObject, key, index) {
 		// create element 'li'
 		var url = urlObject.url;
 		var $listLi = document.createElement('li');
@@ -196,7 +196,7 @@ function displaySharedContent() {
 			var newUrlText = document.createTextNode('NEW');
 			$newUrlWrapper.appendChild(newUrlText);
 			$urlManageGroup.appendChild($newUrlWrapper);
-			addEventListenerToNewurlText($newUrlWrapper);
+			addEventListenerToNewurlText(urlObject, key, $newUrlWrapper);
 		}
 		
 
@@ -250,10 +250,20 @@ function displaySharedContent() {
 		});
 	}
 
-	function addEventListenerToNewurlText($newUrlWrapper) {
+	function addEventListenerToNewurlText(urlObj, key ,$newUrlWrapper) {
+		console.log(getSharedFrom());
+		console.log(key);
+
 		$newUrlWrapper.addEventListener('click', function() {
 			$newUrlWrapper.style.display = 'none';
-			console.log("clicked?!");
+			// var newurlRef = new Firebase("https://blinding-fire-4757.firebaseio.com/David/"+key);
+			console.log(urlObj.url);
+			ref.child(getSharedFrom()).child(key).update({
+				url: urlObj.url,
+				read: true,
+				dateTime: urlObj.dateTime
+			});
+			
 		});
 	}
 }

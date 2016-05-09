@@ -66,6 +66,16 @@ body {
 }
 
 .url-item {
-	cursor: pointer;
+	
 	border: 1px solid #ccc;
+}
+
+.url-item-info {
+	cursor: pointer;
+}
+
+
+.new-url-text-wrapper {
+	color: red;
+	cursor: pointer;
 }

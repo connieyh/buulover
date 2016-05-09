@@ -133,22 +133,26 @@ function displaySharedContent() {
 		}
 
 		for (var i = 0; i < keyArray.length; i++) {
-			var $elements = buildElements(urlListObject[keyArray[i]].url, i);
+			var $elements = buildElements(urlListObject[keyArray[i]], i);
 			assembleList($elements);
 		}
 
 	});
 
 
+	function isRead(urlObject) {
+		return urlObject.read;
+	}
 
-
-	function buildElements(url, index) {
+	function buildElements(urlObject, index) {
 		// create element 'li'
+		var url = urlObject.url;
 		var $listLi = document.createElement('li');
 		// listLi.setAttribute('id', 'url-'+index);
 		$listLi.id = 'url-'+(index+1);
 		$listLi.className = 'url-item-wrapper'
 		// console.log($listLi);
+		
 
 
 		// create element 'article' with classname 'url-item'
@@ -171,6 +175,8 @@ function displaySharedContent() {
 		$urlItemText.appendChild(urlText);
 		$urlItemInfo.appendChild($urlItemText);
 
+		addEventListenerToUrlItem($urlItemInfo, url);
+
 		
 
 		// create element 'a'
@@ -183,7 +189,20 @@ function displaySharedContent() {
 		var $urlManageGroup = document.createElement('div');
 		$urlManageGroup.className = 'url-item-manage-group';
 
-		addEventListenerToUrlItem($listLi, url);
+		var $newUrlWrapper = document.createElement('p');
+		$newUrlWrapper.className = 'new-url-text-wrapper';
+
+		if (!isRead(urlObject)) {
+			var newUrlText = document.createTextNode('NEW');
+			$newUrlWrapper.appendChild(newUrlText);
+			$urlManageGroup.appendChild($newUrlWrapper);
+			addEventListenerToNewurlText($newUrlWrapper);
+		}
+		
+
+
+
+
 		// anchor.appendChild(t);
 		// anchor.href = url;
 		// anchor.target = "_blank";
@@ -217,7 +236,7 @@ function displaySharedContent() {
 		$listLi.appendChild($listArticle);
 		$urlListGroup.appendChild($listLi);
 
-		console.log($urlListGroup);
+		// console.log($urlListGroup);
 
 		return $listLi;
 
@@ -225,9 +244,16 @@ function displaySharedContent() {
 		// console.log($urlListContainer);
 	}
 
-	function addEventListenerToUrlItem($urlItem, url) {
-		$urlItem.addEventListener('click', function() {
+	function addEventListenerToUrlItem($urlItemInfo, url) {
+		$urlItemInfo.addEventListener('click', function() {
 			window.open(url, '_blank');
+		});
+	}
+
+	function addEventListenerToNewurlText($newUrlWrapper) {
+		$newUrlWrapper.addEventListener('click', function() {
+			$newUrlWrapper.style.display = 'none';
+			console.log("clicked?!");
 		});
 	}
 }

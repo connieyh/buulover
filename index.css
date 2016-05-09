@@ -60,3 +60,12 @@ body {
 .shareForm {
 	text-align: center;
 }
+
+.url-item-wrapper {
+	margin-bottom: 5em;
+}
+
+.url-item {
+	cursor: pointer;
+	border: 1px solid #ccc;
+}
